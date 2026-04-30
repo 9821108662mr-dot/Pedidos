@@ -98,7 +98,7 @@ async function sendOrder() {
     const url = cart.generateWhatsAppMessage(
       customerName.value.trim(), customerPhone.value.trim()
     )
-    window.open(url, '_blank')
+    window.location.href = url
 
     // Clear cart
     cart.clearCart()
