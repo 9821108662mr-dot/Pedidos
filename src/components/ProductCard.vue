@@ -166,7 +166,7 @@ function addToCart() {
 }
 
 .card-body {
-  padding: 1.2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -197,8 +197,9 @@ function addToCart() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-top: auto;
+  flex-wrap: wrap;
 }
 
 .card-price {
@@ -215,7 +216,7 @@ function addToCart() {
 
 .price-amount {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--color-primary-dark);
 }
@@ -230,6 +231,7 @@ function addToCart() {
 .add-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
   padding: 0.55rem 1rem;
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
@@ -241,6 +243,7 @@ function addToCart() {
   font-weight: 600;
   transition: all 0.3s ease;
   white-space: nowrap;
+  flex-grow: 1;
 }
 
 .add-btn:hover {
