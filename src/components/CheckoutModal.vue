@@ -24,6 +24,9 @@
               <li v-for="item in cart.items" :key="item.id">
                 {{ item.quantity }}x {{ item.name }} — ${{ (item.price * item.quantity).toFixed(2) }}
               </li>
+              <li v-if="cart.acceptDelivery" class="delivery-item">
+                1x Servicio a domicilio — $30.00
+              </li>
             </ul>
             <div class="order-total">Total: ${{ cart.total.toFixed(2) }} MXN</div>
           </div>
@@ -63,6 +66,13 @@ async function sendOrder() {
       product_id: i.id, name: i.name,
       quantity: i.quantity, price: i.price
     }))
+    
+    if (cart.acceptDelivery) {
+      orderItems.push({
+        product_id: 'delivery', name: 'Servicio a domicilio',
+        quantity: 1, price: 30
+      })
+    }
 
     // Update stock for each item
     for (const item of cart.items) {

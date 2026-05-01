@@ -39,13 +39,24 @@
               <span>Productos</span>
               <span>{{ cart.itemCount }} artículos</span>
             </div>
+            <div class="summary-row">
+              <span>Envío</span>
+              <span>{{ cart.acceptDelivery ? '$30.00' : '$0.00' }}</span>
+            </div>
             <div class="summary-row total">
               <span>Total</span>
               <span>${{ cart.total.toFixed(2) }} MXN</span>
             </div>
           </div>
 
-          <button class="checkout-btn" @click="cart.openCheckout()">
+          <div class="delivery-notice">
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="cart.acceptDelivery" />
+              <span>Acepto el costo extra de $30 MXN por servicio a domicilio</span>
+            </label>
+          </div>
+
+          <button class="checkout-btn" @click="cart.openCheckout()" :disabled="!cart.acceptDelivery">
             📲 Pedir por WhatsApp
           </button>
         </div>
@@ -196,6 +207,32 @@ const defaultImage = 'data:image/svg+xml,' + encodeURIComponent(
   border-top: 1px dashed var(--color-border);
 }
 
+.delivery-notice {
+  margin: 0 1.5rem 1rem;
+  padding: 0.8rem;
+  background: rgba(248, 232, 238, 0.4);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-top: 0.1rem;
+  accent-color: var(--color-primary);
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+}
+
 .checkout-btn {
   margin: 0 1.5rem 1.5rem; padding: 1rem;
   background: #25D366; color: white; border: none;
@@ -204,10 +241,16 @@ const defaultImage = 'data:image/svg+xml,' + encodeURIComponent(
   transition: all 0.3s ease;
 }
 
-.checkout-btn:hover {
+.checkout-btn:hover:not(:disabled) {
   background: #20bd5a;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+}
+
+.checkout-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #a0a0a0;
 }
 
 /* Transitions */

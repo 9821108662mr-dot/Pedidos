@@ -5,13 +5,15 @@ export const useCartStore = defineStore('cart', () => {
   const items = ref([])
   const isOpen = ref(false)
   const isCheckoutOpen = ref(false)
+  const acceptDelivery = ref(false)
 
   const itemCount = computed(() => {
     return items.value.reduce((sum, item) => sum + item.quantity, 0)
   })
 
   const total = computed(() => {
-    return items.value.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    const subtotal = items.value.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    return acceptDelivery.value ? subtotal + 30 : subtotal
   })
 
   function addItem(product) {
@@ -52,6 +54,7 @@ export const useCartStore = defineStore('cart', () => {
     items.value = []
     isOpen.value = false
     isCheckoutOpen.value = false
+    acceptDelivery.value = false
   }
 
   function toggleCart() {
@@ -80,6 +83,10 @@ export const useCartStore = defineStore('cart', () => {
       message += `• ${item.quantity}x ${item.name} — $${(item.price * item.quantity).toFixed(2)}\n`
     })
     
+    if (acceptDelivery.value) {
+      message += `• 1x Servicio a domicilio — $30.00\n`
+    }
+    
     message += `\n💰 *Total: $${total.value.toFixed(2)} MXN*\n`
     
     const now = new Date()
@@ -98,6 +105,7 @@ export const useCartStore = defineStore('cart', () => {
     items,
     isOpen,
     isCheckoutOpen,
+    acceptDelivery,
     itemCount,
     total,
     addItem,
