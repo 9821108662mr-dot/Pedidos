@@ -67,7 +67,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function generateWhatsAppMessage(customerName, customerPhone) {
-    const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+529821798993'
+    const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+529821847993'
     
     let message = `🧁 *Nuevo Pedido — Delicias Lody*\n\n`
     message += `👤 *Cliente:* ${customerName}\n`
