@@ -11,6 +11,7 @@
         <span>Agotado</span>
       </div>
       <div v-if="product.category" class="card-category">{{ product.category }}</div>
+      <div v-if="product.is_offer" class="offer-badge">🌟 Oferta</div>
     </div>
     
     <div class="card-body">
@@ -182,6 +183,26 @@ function addToCart() {
   color: var(--color-primary-dark);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.offer-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
+  animation: pulse-offer 2s infinite;
+  z-index: 10;
+}
+
+@keyframes pulse-offer {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .card-body {

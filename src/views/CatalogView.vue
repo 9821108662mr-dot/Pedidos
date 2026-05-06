@@ -69,11 +69,14 @@ const selectedCategory = ref('Todos')
 
 const categories = computed(() => {
   const cats = [...new Set(products.value.map(p => p.category).filter(Boolean))]
-  return ['Todos', ...cats]
+  const hasOffers = products.value.some(p => p.is_offer)
+  const baseCats = hasOffers ? ['Todos', '🌟 Ofertas'] : ['Todos']
+  return [...baseCats, ...cats]
 })
 
 const filteredProducts = computed(() => {
   if (selectedCategory.value === 'Todos') return products.value
+  if (selectedCategory.value === '🌟 Ofertas') return products.value.filter(p => p.is_offer)
   return products.value.filter(p => p.category === selectedCategory.value)
 })
 

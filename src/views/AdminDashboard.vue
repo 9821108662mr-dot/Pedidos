@@ -44,6 +44,12 @@
               <input v-model="form.category" placeholder="Ej: Pasteles" />
             </div>
           </div>
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="form.is_offer" />
+              <span>🌟 Marcar como "Oferta del día"</span>
+            </label>
+          </div>
           <div class="form-group">
             <label>Descripción</label>
             <textarea v-model="form.description" rows="2" placeholder="Descripción del postre..."></textarea>
@@ -150,7 +156,7 @@ const formError = ref('')
 const formSuccess = ref('')
 const fileInput = ref(null)
 
-const form = ref({ name:'', description:'', price:0, stock:0, category:'', image_url:'' })
+const form = ref({ name:'', description:'', price:0, stock:0, category:'', image_url:'', is_offer:false })
 
 const defaultImg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect fill="%23f8e8ee" width="80" height="80" rx="8"/><text x="40" y="48" text-anchor="middle" font-size="28">🧁</text></svg>')
 
@@ -187,7 +193,7 @@ async function fetchOrders() {
 
 function openAddForm() {
   editingProduct.value = null
-  form.value = { name:'', description:'', price:0, stock:0, category:'', image_url:'' }
+  form.value = { name:'', description:'', price:0, stock:0, category:'', image_url:'', is_offer:false }
   formError.value = ''
   formSuccess.value = ''
   tab.value = 'add'
@@ -195,13 +201,13 @@ function openAddForm() {
 
 function editProduct(p) {
   editingProduct.value = p.id
-  form.value = { name:p.name, description:p.description||'', price:p.price, stock:p.stock, category:p.category||'', image_url:p.image_url||'' }
+  form.value = { name:p.name, description:p.description||'', price:p.price, stock:p.stock, category:p.category||'', image_url:p.image_url||'', is_offer:p.is_offer||false }
   tab.value = 'add'
 }
 
 function resetForm() {
   editingProduct.value = null
-  form.value = { name:'', description:'', price:0, stock:0, category:'', image_url:'' }
+  form.value = { name:'', description:'', price:0, stock:0, category:'', image_url:'', is_offer:false }
   tab.value = 'products'
 }
 
@@ -226,6 +232,7 @@ async function saveProduct() {
       name: form.value.name, description: form.value.description,
       price: form.value.price, stock: form.value.stock,
       category: form.value.category, image_url: form.value.image_url,
+      is_offer: form.value.is_offer,
       active: true
     }
     if (editingProduct.value) {
@@ -284,6 +291,10 @@ async function logout() {
 .form-group input,.form-group textarea { width:100%;padding:0.65rem 0.9rem;border:2px solid var(--color-border);border-radius:10px;font-size:0.85rem;font-family:inherit;outline:none;transition:border-color 0.2s;box-sizing:border-box }
 .form-group input:focus,.form-group textarea:focus { border-color:var(--color-primary) }
 .form-group small { font-size:0.7rem;color:var(--color-text-light);margin-top:0.2rem;display:block }
+.checkbox-group { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.checkbox-label { display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 600; color: var(--color-primary-dark); background: rgba(236,179,200,0.15); padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid rgba(236,179,200,0.3); transition: all 0.2s; }
+.checkbox-label:hover { background: rgba(236,179,200,0.25); }
+.checkbox-label input { width: auto !important; margin: 0; cursor: pointer; }
 .form-actions { display:flex;gap:0.75rem }
 .save-btn { padding:0.7rem 1.5rem;background:linear-gradient(135deg,var(--color-primary),var(--color-accent));color:white;border:none;border-radius:12px;cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.3s }
 .save-btn:hover:not(:disabled) { transform:translateY(-2px);box-shadow:0 6px 20px rgba(236,179,200,0.4) }
