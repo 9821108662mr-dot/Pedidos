@@ -93,9 +93,11 @@
                 <td>{{ p.category || '—' }}</td>
                 <td>${{ p.price.toFixed(2) }}</td>
                 <td><span class="stock-pill" :class="stockClass(p.stock)">{{ p.stock }}</span></td>
-                <td class="actions-cell">
-                  <button class="action-btn edit" @click="editProduct(p)">✏️</button>
-                  <button class="action-btn delete" @click="deleteProduct(p.id)">🗑️</button>
+                <td>
+                  <div class="actions-cell">
+                    <button class="action-btn edit" @click="editProduct(p)">✏️</button>
+                    <button class="action-btn delete" @click="deleteProduct(p.id)">🗑️</button>
+                  </div>
                 </td>
               </tr>
               <tr v-if="products.length===0"><td colspan="6" class="empty-row">No hay productos</td></tr>

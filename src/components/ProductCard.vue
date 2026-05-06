@@ -10,15 +10,18 @@
       <div v-if="product.stock <= 0" class="stock-overlay">
         <span>Agotado</span>
       </div>
-      <div v-else-if="product.stock <= 3" class="stock-warning">
-        <span>¡Últimos {{ product.stock }}!</span>
-      </div>
       <div v-if="product.category" class="card-category">{{ product.category }}</div>
     </div>
     
     <div class="card-body">
       <h3 class="card-name">{{ product.name }}</h3>
       <p v-if="product.description" class="card-description">{{ product.description }}</p>
+      
+      <div v-if="product.stock > 0" class="stock-indicator" :class="{ 'low-stock': product.stock <= 3 }">
+        <span class="stock-dot"></span>
+        <span v-if="product.stock <= 3">¡Últimos {{ product.stock }}!</span>
+        <span v-else>{{ product.stock }} disponibles</span>
+      </div>
       
       <div class="card-footer">
         <div class="card-price">
@@ -129,25 +132,41 @@ function addToCart() {
   letter-spacing: 1px;
 }
 
-.stock-warning {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+.stock-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  margin-bottom: 0.8rem;
+  background: rgba(236, 179, 200, 0.1);
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  width: fit-content;
 }
 
-.stock-warning span {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-  color: white;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.7rem;
+.stock-indicator.low-stock {
+  color: #e74c3c;
+  background: #fdf2f2;
   font-weight: 600;
-  animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+.stock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #2ecc71;
+}
+
+.stock-indicator.low-stock .stock-dot {
+  background-color: #e74c3c;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+  70% { box-shadow: 0 0 0 4px rgba(231, 76, 60, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
 }
 
 .card-category {
