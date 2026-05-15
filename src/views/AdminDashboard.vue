@@ -65,13 +65,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label>URL de imagen</label>
-            <input v-model="form.image_url" type="url" placeholder="https://..." />
-            <small>Sube tu imagen a Supabase Storage y pega la URL aquí</small>
-          </div>
-          <div class="form-group">
-            <label>Imagen (subir archivo)</label>
-            <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" />
+            <label>Imagen del producto</label>
+            <div v-if="form.image_url" class="image-preview-container">
+              <img :src="form.image_url" class="img-preview" alt="Vista previa" />
+              <button type="button" class="remove-img-btn" @click="form.image_url = ''; formSuccess = ''">Cambiar imagen</button>
+            </div>
+            <div v-else>
+              <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" />
+              <small>Sube la imagen directamente desde tu dispositivo</small>
+            </div>
           </div>
           <div class="form-actions">
             <button type="submit" class="save-btn" :disabled="saving">
@@ -214,13 +216,17 @@ function resetForm() {
 async function handleFileUpload(e) {
   const file = e.target.files[0]
   if (!file) return
+  
+  formSuccess.value = 'Subiendo imagen...'
+  formError.value = ''
+  
   const ext = file.name.split('.').pop()
   const fileName = `${Date.now()}.${ext}`
   const { data, error } = await supabase.storage.from('product-images').upload(fileName, file)
-  if (error) { formError.value = 'Error al subir imagen'; return }
+  if (error) { formError.value = 'Error al subir imagen'; formSuccess.value = ''; return }
   const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(fileName)
   form.value.image_url = urlData.publicUrl
-  formSuccess.value = 'Imagen subida ✓'
+  formSuccess.value = 'Imagen lista ✓'
 }
 
 async function saveProduct() {
@@ -327,6 +333,10 @@ tr:hover { background:rgba(248,232,238,0.2) }
 .empty-row { text-align:center;color:var(--color-text-light);padding:2rem!important }
 tr.low-stock { background:rgba(255,243,205,0.3) }
 tr.no-stock { background:rgba(248,215,218,0.2) }
+.image-preview-container { display:flex; align-items:center; gap:1rem; margin-top:0.5rem; }
+.img-preview { width:60px; height:60px; object-fit:cover; border-radius:10px; border:2px solid var(--color-border); }
+.remove-img-btn { background:#f8d7da; color:#721c24; border:none; padding:0.4rem 0.8rem; border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:600; transition:all 0.2s; }
+.remove-img-btn:hover { background:#f5c6cb; }
 @media (max-width:768px) {
   .admin-sidebar { width:100%;position:relative;top:0;flex-direction:row;align-items:center;padding:0.75rem;gap:0.5rem;border-right:none;border-bottom:1px solid var(--color-border) }
   .admin-page { flex-direction:column }
