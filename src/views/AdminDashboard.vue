@@ -223,7 +223,7 @@ async function handleFileUpload(e) {
   const ext = file.name.split('.').pop()
   const fileName = `${Date.now()}.${ext}`
   const { data, error } = await supabase.storage.from('product-images').upload(fileName, file)
-  if (error) { console.error('Storage error:', error); formError.value = 'Error: ' + (error.message || error.statusCode || JSON.stringify(error)); formSuccess.value = ''; return }
+  if (error) { formError.value = 'Error al subir imagen. Intenta de nuevo.'; formSuccess.value = ''; return }
   const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(fileName)
   form.value.image_url = urlData.publicUrl
   formSuccess.value = 'Imagen lista ✓'
